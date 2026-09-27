@@ -1,0 +1,20 @@
+# 编译产物
+*.exe
+*.dll
+*.pdb
+*.obj
+
+# 构建目录
+build/
+bin/
+obj/
+out/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# 系统文件
+Thumbs.db
+Desktop.ini
