@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "resource.h"
-#define IDC_BUTTON_TEST 1001
+#define FIRST_BUTTON 1
+#define SECOND_BUTTON 2
 
 static HFONT g_hFont = NULL;
 
@@ -16,15 +17,27 @@ LRESULT CALLBACK MainWndProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 
             CreateWindowA(
                 "BUTTON",
-                "Press Me",
+                "First Button",
+                WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+                200, 50,
+                200, 50,
+                hwnd,
+                (HMENU)FIRST_BUTTON,
+                ((LPCREATESTRUCT)lParam)->hInstance,
+                NULL
+            );
+            CreateWindowA(
+                "BUTTON",
+                "Second Button",
                 WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
                 200, 350,
                 200, 50,
                 hwnd,
-                (HMENU)IDC_BUTTON_TEST,
+                (HMENU)SECOND_BUTTON,
                 ((LPCREATESTRUCT)lParam)->hInstance,
                 NULL
             );
+            
             return 0;
         }
  
@@ -39,7 +52,7 @@ LRESULT CALLBACK MainWndProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             RECT rect;
             GetClientRect(hwnd, &rect);
 
-            DrawTextA(hdc, "TonySystem 0.2", -1, &rect,
+            DrawTextA(hdc, "TonyApp 0.3.1", -1, &rect,
                       DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
             SelectObject(hdc, hOldFont);
@@ -52,9 +65,20 @@ LRESULT CALLBACK MainWndProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam
         }
  
         case WM_COMMAND: {
-            if (LOWORD(wParam) == IDC_BUTTON_TEST) {
-                MessageBoxA(hwnd, "Clicked", "tips", MB_OK);
-            }
+        	WORD what = LOWORD(wParam);
+        	int a = 0;
+            if (what == FIRST_BUTTON) {
+                a = MessageBoxA(hwnd, "First Clicked", "tips", MB_YESNO);
+            } else if (what == SECOND_BUTTON) {
+            	a = MessageBoxA(hwnd, "Second Clicked", "tips", MB_YESNO);
+			}
+			if(a){
+				if (a == IDYES) {
+					MessageBoxA(hwnd, "Yes!", "tips", MB_OK);
+				} else {
+					MessageBoxA(hwnd, "No!", "tips", MB_OK);
+				}
+			}
             return 0;
         }
 
@@ -84,7 +108,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     wnd.hInstance     = hInstance;
     wnd.hCursor       = LoadCursorA(NULL, IDC_ARROW);
     wnd.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    wnd.lpszClassName = "TonySystem";
+    wnd.lpszClassName = "TonyApp";
 
     HICON hIcon = LoadIconA(hInstance, MAKEINTRESOURCE(IDI_MYICON));
     wnd.hIcon     = hIcon;
@@ -95,7 +119,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
         return 1;
     }
 
-    HWND hwnd = CreateWindowA("TonySystem", "TonySystem0.2", WS_OVERLAPPEDWINDOW,
+    HWND hwnd = CreateWindowA("TonyApp", "TonyApp", WS_OVERLAPPEDWINDOW,
                               CW_USEDEFAULT, CW_USEDEFAULT, 600, 450,
                               NULL, NULL, hInstance, NULL);
 

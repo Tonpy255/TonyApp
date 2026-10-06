@@ -1,8 +1,11 @@
 # 编译产物
-*.exe
 *.dll
 *.pdb
+*.o
 *.obj
+*.exe
+*.a
+*.lib
 
 # 构建目录
 build/
